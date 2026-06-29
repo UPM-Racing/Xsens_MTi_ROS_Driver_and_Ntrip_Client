@@ -5,6 +5,8 @@
 
 This code was based on the official Xsens 2025.0 [Open source Xsens Device API](https://base.movella.com/s/article/Introduction-to-the-MT-SDK-programming-examples-for-MTi-devices) tested on MTi-680G/MTi-8/MTi-630/MTi-300 with ROS2 Humble at Ubuntu 22.04.3 LTS .
 
+> **UPM-Racing fork.** Fork of the official Xsens driver maintained for the UPM Racing Formula Student team. The only functional change versus upstream is a **device reset on startup** (parameter `enable_reset_on_startup`, default `true`), which fixes the GNSS receiver coming up stuck (RTK status 0, no satellites, no position) on an MTi-680 with an external ZED-F9P. To pull upstream updates: `git fetch upstream && git merge upstream/ros2`.
+
 ## ROS vs ROS2 Versions
 
 Note that this branch contains the `ROS2` implementation that is compatible for `Foxy`, `Humble` and `Jazzy`. 
@@ -14,7 +16,7 @@ If you are looking for the `ROS1` version, you should go to the [`main`](https:/
 ## How to clone this ROS2 branch
 
 ```
-git clone --branch ros2 https://github.com/xsenssupport/Xsens_MTi_ROS_Driver_and_Ntrip_Client.git
+git clone https://github.com/UPM-Racing/Xsens_MTi_ROS_Driver_and_Ntrip_Client.git
 ```
 
 ## Device Settings - Output Configurations
@@ -27,6 +29,8 @@ Here are the recommended Output Configurations and Device Settings:
 ![Alt text](MTi-680_Device_Settings.png)
 
 ## Changes made to the MTi ROS Driver:
+
+ - **(UPM-Racing)** Reset the device on startup (`enable_reset_on_startup`, default `true`), mirroring MT Manager's reset-on-connect. Fixes the external GNSS receiver (MTi-680 + ZED-F9P) coming up with no satellites / no RTK fix until a manual reset.
 
  - Fix the fix_type of the ``/nmea`` GPGGA topic to align with NMEA standards.
  - Add: 
