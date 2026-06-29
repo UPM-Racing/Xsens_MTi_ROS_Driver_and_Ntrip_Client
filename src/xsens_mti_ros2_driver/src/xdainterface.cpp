@@ -392,6 +392,21 @@ bool XdaInterface::prepare()
 {
 	assert(m_device != 0);
 
+	// Reset the device on startup, mirroring what MT Manager does on connect.
+	// On GNSS/INS units with an external receiver (e.g. MTi-680 + ZED-F9P) this
+	// re-initializes the MTi<->GNSS receiver link; without it the receiver can come
+	// up stuck (no satellites, no position, RTK status 0) until a manual reset.
+	bool enable_reset_on_startup = true;
+	m_node->get_parameter("enable_reset_on_startup", enable_reset_on_startup);
+	if (enable_reset_on_startup)
+	{
+		RCLCPP_INFO(m_node->get_logger(), "Resetting device on startup...");
+		if (!m_device->reset())
+			RCLCPP_WARN(m_node->get_logger(), "Device reset on startup failed, continuing anyway.");
+		else
+			RCLCPP_INFO(m_node->get_logger(), "Device reset successful.");
+	}
+
 	if (!m_device->gotoConfig())
 		return handleError("Could not go to config");
 
@@ -1452,6 +1467,8 @@ void XdaInterface::declareCommonParameters()
 		m_node->declare_parameter("frame_id", frame_id);
 	if (!m_node->has_parameter("enable_deviceConfig"))
 		m_node->declare_parameter("enable_deviceConfig", false);
+	if (!m_node->has_parameter("enable_reset_on_startup"))
+		m_node->declare_parameter("enable_reset_on_startup", true);
 	if (!m_node->has_parameter("enable_filter_config"))
 		m_node->declare_parameter("enable_filter_config", false);
 	if (!m_node->has_parameter("mti_filter_option"))
