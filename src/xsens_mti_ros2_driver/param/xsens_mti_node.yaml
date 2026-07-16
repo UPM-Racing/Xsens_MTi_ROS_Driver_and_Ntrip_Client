@@ -108,7 +108,7 @@
         # GNSS Lever Arm (meters): [X, Y, Z]
         # Applicable to: MTi-8/680(G)
         # Default: [0.0, 0.0, 0.0] for unchanged antenna position.
-        GNSS_LeverArm: [0.0, 0.0, 0.0] 
+        GNSS_LeverArm: [0.05, 0.065, 0.09] 
 
         # u-blox GNSS Platform Settings
         # -----------------------------
